@@ -7,6 +7,8 @@ const cors=require('cors');
 const {PORT}=require('./config/serverConfig');
 const connect=require('./config/dbConfig');
 
+const userRouter=require('./routes/user-routes')
+
 const app=express();
 
 const startServer=()=>{
@@ -16,6 +18,8 @@ const startServer=()=>{
      app.use(helmet.crossOriginResourcePolicy({policy:"cross-origin"}));
      app.use(bodyParser.json());
      app.use(bodyParser.urlencoded({extended:true}));
+
+     app.use('/api/user',userRouter);
 
      app.listen(PORT,()=>{
         console.log(`server started at ${PORT}`);
