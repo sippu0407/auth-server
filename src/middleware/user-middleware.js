@@ -32,7 +32,19 @@ function authenticateUserUpdatePassword(req, res, next) {
     const userData = req.body;
     if (!userData.newPassword || !req.params.id)  {
         return res.status(400).json({
-            message: "Name, email, and password are required fields",
+            message: "name, email, and password are required fields",
+            success: false
+        });
+    }
+
+    next();
+}
+
+function authenticateUserLogin(req, res, next) {
+
+    if (!req.body.password || !req.body.email)  {
+        return res.status(400).json({
+            message: "email, and password are required fields",
             success: false
         });
     }
@@ -44,5 +56,6 @@ function authenticateUserUpdatePassword(req, res, next) {
 module.exports = {
     validateUserData,
     authenticateUserUpdate,
-    authenticateUserUpdatePassword
+    authenticateUserUpdatePassword,
+    authenticateUserLogin
 };

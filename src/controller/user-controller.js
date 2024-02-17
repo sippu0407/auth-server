@@ -117,10 +117,35 @@ async function deleteUser(req, res) {
     }
 }
 
+async function loginUser(req, res) {
+    try {
+        const {email,password} = req.body;
+        const token = await userService.loginService({email,plainPassword:password});
+
+        if (!token) {
+            res.status(200).json({
+                message: "unable to login",
+            });
+        } else {
+            const expiryTime=new Date(Date.now() + 36000);
+            res.header('Access-Control-Allow-Credentials', true);
+            res.cookie('token',token,{httpOnly:true , expires:expiryTime}).status(200).json({
+            message: "Login successful",
+            });
+        }
+    } catch (error) {
+        console.error("Error occurred in user controller - login user:", error.message);
+        res.status(500).json({
+            message: error.message,
+            error: error
+        });
+    }
+}
 module.exports = {
     createUser,
     getUser,
     updateUser,
     deleteUser,
-    updateUserPassword
+    updateUserPassword,
+    loginUser
 };

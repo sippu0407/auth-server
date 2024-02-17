@@ -11,14 +11,19 @@ const userRouter=require('./routes/user-routes')
 
 const app=express();
 
+const corsOptions = {
+   origin: 'http://localhost:3000',
+   credentials: true, 
+ };
+
 const startServer=()=>{
      app.use(morgan('dev'));
-     app.use(cors());
+     app.use(cors(corsOptions));
+     app.options('*', cors(corsOptions));
      app.use(helmet());
      app.use(helmet.crossOriginResourcePolicy({policy:"cross-origin"}));
      app.use(bodyParser.json());
      app.use(bodyParser.urlencoded({extended:true}));
-
      app.use('/api/user',userRouter);
 
      app.listen(PORT,()=>{
