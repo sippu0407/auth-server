@@ -1,4 +1,6 @@
 const mongoose=require('mongoose');
+const bcryptjs=require('bcryptjs');
+
 
 const userSchema=new mongoose.Schema({
 
@@ -18,6 +20,16 @@ const userSchema=new mongoose.Schema({
         required:true
     }
 });
+
+const encryptPassword = (userDoc) => {
+    const hashPassword = bcryptjs.hashSync(userDoc.password,10);
+    userDoc.password = hashPassword;
+  };
+  
+  userSchema.pre('save', function(next) {
+    encryptPassword(this); 
+    next();
+  });
 
 const User=mongoose.model('User',userSchema);
 
